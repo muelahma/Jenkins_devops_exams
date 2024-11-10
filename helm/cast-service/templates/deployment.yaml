@@ -49,6 +49,8 @@ spec:
           name: cast-service-claim0
       restartPolicy: Always
       serviceAccountName: ""
+      imagePullSecrets:
+      - name: dockerhub-secret
       volumes:
       - name: cast-service-claim0
         persistentVolumeClaim:

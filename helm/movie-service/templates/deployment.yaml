@@ -51,6 +51,8 @@ spec:
           name: movie-service-claim0
       restartPolicy: Always
       serviceAccountName: ""
+      imagePullSecrets:
+      - name: dockerhub-secret
       volumes:
       - name: movie-service-claim0
         persistentVolumeClaim:
