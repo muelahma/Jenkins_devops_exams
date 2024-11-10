@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git url: 'https://github.com/muelahma/Jenkins_devops_exams.git', branch: 'main'
+                git url: 'https://github.com/muelahma/Jenkins_devops_exams.git', branch: 'master'
             }
         }
 
