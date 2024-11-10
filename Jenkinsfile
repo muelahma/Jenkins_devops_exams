@@ -24,12 +24,11 @@ pipeline {
 
         stage('Push Docker Images to Docker Hub') {
             steps {
-                script {
-                    sh '''
-                        echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin
-                    '''
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-access-token', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
+                    sh 'echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin'
                     sh 'docker push ${DOCKER_REPO}/movie-service:latest'
                     sh 'docker push ${DOCKER_REPO}/cast-service:latest'
+                    sh 'docker logout'
                 }
             }
         }
