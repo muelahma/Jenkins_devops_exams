@@ -26,7 +26,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        echo "${DOCKER_HUB_CREDENTIALS_USR}" | docker login -u "${DOCKER_HUB_CREDENTIALS_USR}" --password-stdin
+                        echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin
                     '''
                     sh 'docker push ${DOCKER_REPO}/movie-service:latest'
                     sh 'docker push ${DOCKER_REPO}/cast-service:latest'
