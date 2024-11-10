@@ -40,7 +40,7 @@ spec:
           value: http://cast_service:8000/api/v1/casts/
         - name: DATABASE_URI
           value: postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev
-        image: movie-service
+        image: muelahma/movie-service
         imagePullPolicy: "Always"
         name: movie-service
         ports:
