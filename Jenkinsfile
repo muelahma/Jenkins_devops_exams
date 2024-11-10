@@ -55,9 +55,9 @@ pipeline {
                     withCredentials([file(credentialsId: 'kubeconfig-credentials-id', variable: 'KUBECONFIG')]) {
                         // Deploy using Helm
                         sh '''
-                            helm upgrade --install movie-service ./helm/movie-service --namespace "${namespace}" --set image.repository=${DOCKER_REPO}/movie-service,image.tag=latest
-                            helm upgrade --install cast-service ./helm/cast-service --namespace "${namespace}" --set image.repository=${DOCKER_REPO}/cast-service,image.tag=latest
-                            helm upgrade --install nginx ./helm/nginx --namespace "${namespace}"
+                            helm upgrade --install movie-service ./helm/movie-service --namespace prod --set image.repository=${DOCKER_REPO}/movie-service,image.tag=latest
+                            helm upgrade --install cast-service ./helm/cast-service --namespace prod --set image.repository=${DOCKER_REPO}/cast-service,image.tag=latest
+                            helm upgrade --install nginx ./helm/nginx --namespace prod
                         '''
                     }
                 }
