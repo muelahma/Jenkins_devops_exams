@@ -35,35 +35,30 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes') {
-            environment {
-                NAMESPACE = ''  // Define NAMESPACE as an environment variable
-            }
             steps {
                 script {
-                    def branchName = env.BRANCH_NAME
-                    if (branchName == 'dev') {
-                        env.NAMESPACE = 'dev'
-                    } else if (branchName == 'qa') {
-                        env.NAMESPACE = 'qa'
-                    } else if (branchName == 'staging') {
-                        env.NAMESPACE = 'staging'
-                    } else if (branchName == 'main') {
-                        input message: 'Deploy to Production?', ok: 'Deploy'
-                        env.NAMESPACE = 'prod'
-                    } else {
-                        env.NAMESPACE = 'dev'
-                    }
-
-                    // Print NAMESPACE for debugging
-                    echo "Deploying to namespace: ${env.NAMESPACE}"
-
                     withCredentials([file(credentialsId: 'kubeconfig-credentials-id', variable: 'KUBECONFIG')]) {
-                        // Use NAMESPACE environment variable directly in the Helm commands
-                        sh """
-                            helm upgrade --install movie-service ./helm/movie-service --namespace ${env.NAMESPACE} --set image.repository=${DOCKER_REPO}/movie-service,image.tag=latest
-                            helm upgrade --install cast-service ./helm/cast-service --namespace ${env.NAMESPACE} --set image.repository=${DOCKER_REPO}/cast-service,image.tag=latest
-                            helm upgrade --install nginx ./helm/nginx --namespace ${env.NAMESPACE}
-                        """
+                        def branchName = env.BRANCH_NAME
+                        def namespace = ''
+
+                        if (branchName == 'dev') {
+                            namespace = 'dev'
+                        } else if (branchName == 'qa') {
+                            namespace = 'qa'
+                        } else if (branchName == 'staging') {
+                            namespace = 'staging'
+                        } else if (branchName == 'master') {
+                            input message: 'Deploy to Production?', ok: 'Deploy'
+                            namespace = 'prod'
+                        } else {
+                            namespace = 'dev'
+                        }
+                        // Deploy using Helm
+                        sh '''
+                            helm upgrade --install movie-service ./helm/movie-service --namespace ${namespace} --set image.repository=${DOCKER_REPO}/movie-service,image.tag=latest
+                            helm upgrade --install cast-service ./helm/cast-service --namespace ${namespace} --set image.repository=${DOCKER_REPO}/cast-service,image.tag=latest
+                            helm upgrade --install nginx ./helm/nginx --namespace ${namespace}
+                        '''
                     }
                 }
             }
