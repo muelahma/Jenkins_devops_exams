@@ -1,0 +1,13 @@
+replicaCount: 1
+
+image:
+  repository: muelahma/cast-service  # Replace with your Docker Hub username
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8002
+
+env:
+  DATABASE_URI: postgresql://cast_db_username:cast_db_password@cast_db/cast_db_dev

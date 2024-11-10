@@ -37,7 +37,6 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Determine the namespace based on the branch
                     def branchName = env.BRANCH_NAME
                     def namespace = ''
 
@@ -53,10 +52,12 @@ pipeline {
                     } else {
                         namespace = 'dev'
                     }
+
+                    // Update the image tags in values.yaml files
                     sh """
-                        helm upgrade --install movie-service ./helm/movie-service --namespace ${namespace} --set image.repository=${DOCKER_REPO}/movie-service,image.tag=latest
-                        helm upgrade --install cast-service ./helm/cast-service --namespace ${namespace} --set image.repository=${DOCKER_REPO}/cast-service,image.tag=latest
-                        helm upgrade --install nginx ./helm/nginx --namespace ${namespace}
+                        helm upgrade --install movie-service helm/movie-service --namespace ${namespace} --set image.repository=${DOCKER_REPO}/movie-service,image.tag=latest
+                        helm upgrade --install cast-service helm/cast-service --namespace ${namespace} --set image.repository=${DOCKER_REPO}/cast-service,image.tag=latest
+                        helm upgrade --install nginx helm/nginx --namespace ${namespace}
                     """
                 }
             }

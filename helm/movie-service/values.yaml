@@ -1,0 +1,14 @@
+replicaCount: 1
+
+image:
+  repository: muelahma/movie-service  # Replace with your Docker Hub username
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8001
+
+env:
+  DATABASE_URI: postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev
+  CAST_SERVICE_HOST_URL: http://cast-service:8000/api/v1/casts/
