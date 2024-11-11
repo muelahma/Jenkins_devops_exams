@@ -22,7 +22,7 @@ pipeline {
             }
         }
 
-        stage('Push Docker Images to Docker Hub') {
+        stage('Push Docker Images to DockerHub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-access-token', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
                     sh 'echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin'
